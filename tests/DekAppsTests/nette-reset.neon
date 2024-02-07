@@ -1,0 +1,6 @@
+php:
+    date.timezone: Europe/Prague
+
+
+extensions:
+    dekApps.eventManager: DekApps\Evm\DI\EvmExtension

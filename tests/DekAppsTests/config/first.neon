@@ -1,0 +1,5 @@
+services:
+    subscriber:
+        class: DekAppsTests\Subscribers\FirstTestSubscriber
+        tags:
+            - dekApps.eventManager.subscriber
