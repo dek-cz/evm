@@ -1,0 +1,96 @@
+includes:
+  - vendor/phpstan/phpstan-nette/extension.neon
+  - vendor/phpstan/phpstan-nette/rules.neon
+  - vendor/spaze/phpstan-disallowed-calls/extension.neon
+  - vendor/spaze/phpstan-disallowed-calls/disallowed-dangerous-calls.neon
+  - vendor/spaze/phpstan-disallowed-calls/disallowed-execution-calls.neon
+parameters:
+    checkMissingIterableValueType: false
+    excludes_analyse:
+        - app/Presenters/PaymentTestPresenter.php
+        - app/Presenters/KlientPresenter.php
+        - app/Presenters/KonfiguratorApiPresenter.php
+        - app/Presenters/KonfiguratorPresenter.php
+        - app/Presenters/KonfiguratorRozcestnikPresenter.php
+        - app/Presenters/KonfiguratorRozcestnikPresenter.php
+        - app/Model/FiltrovaciKalkulacka.php
+        - app/Model/FiltrovaciKalkulackaAjax.php
+        - app/Model/FiltrovaciKalkulackaAjaxSkladby.php
+        - app/Model/FiltrovaciNarustaciAjaxKalkulacka.php
+        - app/Model/FiltrovaciNarustaciKalkulacka.php
+        - app/Model/Kalkulacka.php
+        - app/Model/KalkulackaContainer.php
+        - app/Model/KalkulackaSPrioritami.php
+        - app/Model/KalkulackyRepository.php
+        - app/Model/ObecnaKalkulacka.php
+    ignoreErrors:
+        - '#Do-while loop condition is always false.#'
+        - '#Method CheckoutModule\\Hook\\Custom::getSubscribedEvents\(\) should return array<string> but returns array<string, array<int, int\|string>>#'
+        - '#Call to an undefined method [a-zA-Z0-9\\_]+::addDynamic().#'
+        - '#Call to an undefined method [a-zA-Z0-9\\_]+::addRemoveOnClick().#'
+        - '#Call to an undefined method [a-zA-Z0-9\\_]+::createOne().#'
+        - '#Access to an undefined property [a-zA-Z0-9\\_]+::\$parent.#'
+        #- '#Cannot call method addFilter\(\) on Nette\\Application\\UI\\Template\|stdClass.#'
+        #- '#Cannot call method getLatte\(\) on Nette\\Application\\UI\\Template\|stdClass.#'
+        #- '#Call to an undefined method Nette\\ComponentModel\\IComponent::getContainers\(\).#'
+        #- '#Call to an undefined method DekApps\\MssqlProcedure\\IProcedure::getIsCashedResult\(\).#'
+        #- '#Exception Nette\\Application\\AbortException needs to be rethrown.#'
+        - '#Call to an undefined method DekApps\\MssqlProcedure\\IProcedure::fetchObject\(\).#'
+        - '#Call to an undefined method Nette\\Forms\\Controls\\TextInput::setDekWrapper\(\).#'
+        - '#Call to an undefined method Nette\\Forms\\Controls\\Checkbox::setDekWrapper\(\).#'
+        #- '#Call to an undefined method Nette\\ComponentModel\\IComponent::addError\(\).#'
+        #- '#Call to an undefined method Nette\\ComponentModel\\IComponent::getControlPrototype\(\).#'
+        #- '#Call to an undefined method Nette\\Application\\UI\\Template::addFilter\(\).#'
+        #- '#Calling print_r\(\) is forbidden, use logger instead#'
+        #- '#Parameter \#1 \$returnType of method Nette\\Forms\\Container::getValues\(\) expects object\|string\|null, true given.#'
+        - '#Access to an undefined property Nette\\Application\\UI\\Presenter::\$translator.#'
+        - '#Function bdump invoked with [0-9] parameters, 1 required.#'
+        - '#Constant CDN not found.#'
+        - '#Constant SHOP_ID not found.#'
+        - '#Used constant CDN not found.#'
+        - '#Used constant SHOP_ID not found.#'
+        #- '#Constant APP_DIR not found.#'
+        - '#Constant ERROR_500_TEMPLATE not found.#'
+        - '#Constant CACHE_DIR not found.#'
+        #- '#Constant WWW_DIR not found.#'
+        #- '#Constant ROOT_DIR not found.#'
+        #- '#Constant LIBS_DIR not found.#'
+        #- '#Constant VENDOR_DIR not found.#'
+        #- '#Constant LOG_DIR not found.#'
+        #- '#Constant CACHE_DIR not found.#'
+        #- '#Constant TEMP_DIR not found.#'
+        #- '#Constant DATA_USERS not found.#'
+        - '#PHPDoc [a-zA-Z0-9\_]#'
+        #- '#Using $this outside a class#'
+    disallowedMethodCalls:
+#        -
+#            method: 'PotentiallyDangerous\Logger::log()'
+#            message: 'use our own logger instead'
+#        -
+#            method: 'Redis::connect()'
+#            message: 'use our own Redis instead'
+
+    disallowedStaticCalls:
+#        -
+#            method: 'PotentiallyDangerous\Debugger::log()'
+#            message: 'use our own logger instead'
+
+    disallowedFunctionCalls:
+        -
+            function: 'var_dump()'
+            message: 'use logger instead'
+        -
+            function: 'print_r()'
+            message: 'use logger instead'
+
+    disallowedConstants:
+        -
+            constant: 'DATE_ISO8601'
+            message: 'use DATE_ATOM instead'
+        -
+            constant: 'DateTimeInterface::ISO8601'
+            message: 'use DateTimeInterface::ATOM instead'
+    bootstrapFiles:
+        - app/Dek.php
+        #- app/bootstrap.php
+        - app/constants.php
