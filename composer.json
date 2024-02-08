@@ -3,7 +3,7 @@
     "description": "Nette event manager based on doctrine event manager.",
     "type": "library",
     "keywords": [ "dek-cz", "nette",  "doctrine", "events" ],
-    "license": "GNU3",
+    "license": "MIT",
      "require": {
         "php": "^8.2",
         "doctrine/common": "^3.3",
