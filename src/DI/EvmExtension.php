@@ -23,8 +23,6 @@ class EvmExtension extends CompilerExtension
                 ->setType(Evm::class);
             $builder->addAlias(self::EVM_ALIAS, $this->prefix('evm'));
         } else {
-            $builder->addDefinition($this->prefix('evm'))
-                ->setType(Evm::class);
             $builder->addAlias($this->prefix('evm'), EvmExtension::EVM_ALIAS);
         }
     }
