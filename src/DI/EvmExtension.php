@@ -18,7 +18,7 @@ class EvmExtension extends CompilerExtension
     {
         $builder = $this->getContainerBuilder();
         $evmIsDef = $builder->hasDefinition(EvmExtension::EVM_ALIAS);
-        if ($evmDef) {
+        if (!$evmIsDef) {
             $builder->addDefinition($this->prefix('evm'))
                 ->setType(Evm::class);
             $builder->addAlias(self::EVM_ALIAS, $this->prefix('evm'));
