@@ -12,12 +12,15 @@ class EvmExtension extends CompilerExtension
 
     const TAG_SUBSCRIBER = 'dekApps.eventManager.subscriber';
 
+    const EVM_ALIAS = 'dekAppsEventManager';
+
     public function loadConfiguration(): void
     {
         $builder = $this->getContainerBuilder();
 
         $builder->addDefinition($this->prefix('evm'))
             ->setType(Evm::class);
+        $builder->addAlias(self::EVM_ALIAS, $this->prefix('evm'));
     }
 
     public function beforeCompile(): void
