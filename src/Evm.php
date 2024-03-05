@@ -24,7 +24,7 @@ class Evm extends EventManager
     private array $initializedHashMapping = [];
 
     private array $methods = [];
-    
+
     private Container $container;
 
     public function __construct(Container $container)
@@ -88,24 +88,34 @@ class Evm extends EventManager
         return isset($this->listeners[$event]) && $this->listeners[$event];
     }
 
-    public function addEventListener(string|array $events, object|string $listener): void
+    public function addEventListener(string|array $events, object|string|array $listener): void
     {
         if (!$this->initializedSubscribers) {
             $this->initializeSubscribers();
         }
 
+
         $hash = $this->getHash($listener);
 
-        foreach ((array) $events as $event) {
-            // Overrides listener if a previous one was associated already
-            // Prevents duplicate listeners on same event (same instance only)
-            $this->listeners[$event][$hash] = $listener;
-
-            if (\is_string($listener)) {
-                unset($this->initialized[$event]);
-                unset($this->initializedHashMapping[$event][$hash]);
+        foreach ((array) $events as $eventName) {
+            $event = $eventName;
+            if (is_array($eventName) && count($eventName) === 2) {
+                $event = $eventName[0];
+            }
+            if (is_array($listener) && count($listener) === 2) {
+                $this->listeners[$event][$hash] = $listener[0];
+                $this->methods[$event][$hash] = $this->getMethod($listener[0], $listener[1]);
             } else {
-                $this->methods[$event][$hash] = $this->getMethod($listener, $event);
+                // Overrides listener if a previous one was associated already
+                // Prevents duplicate listeners on same event (same instance only)
+                $this->listeners[$event][$hash] = $listener;
+
+                if (\is_string($listener)) {
+                    unset($this->initialized[$event]);
+                    unset($this->initializedHashMapping[$event][$hash]);
+                } else {
+                    $this->methods[$event][$hash] = $this->getMethod($listener, $event);
+                }
             }
         }
     }
@@ -193,8 +203,11 @@ class Evm extends EventManager
         }
     }
 
-    private function getHash(string|object $listener): string
+    private function getHash(string|object|array $listener): string
     {
+        if (is_array($listener) && count($listener) === 2) {
+            return spl_object_hash($listener[0]) . '_method_' . $listener[1];
+        }
         if (\is_string($listener)) {
             return '_service_' . $listener;
         }
