@@ -94,14 +94,10 @@ class Evm extends EventManager
             $this->initializeSubscribers();
         }
 
-
         $hash = $this->getHash($listener);
 
         foreach ((array) $events as $eventName) {
             $event = $eventName;
-            if (is_array($eventName) && count($eventName) === 2) {
-                $event = $eventName[0];
-            }
             if (is_array($listener) && count($listener) === 2) {
                 $this->listeners[$event][$hash] = $listener[0];
                 $this->methods[$event][$hash] = $this->getMethod($listener[0], $listener[1]);
@@ -109,7 +105,6 @@ class Evm extends EventManager
                 // Overrides listener if a previous one was associated already
                 // Prevents duplicate listeners on same event (same instance only)
                 $this->listeners[$event][$hash] = $listener;
-
                 if (\is_string($listener)) {
                     unset($this->initialized[$event]);
                     unset($this->initializedHashMapping[$event][$hash]);
@@ -120,7 +115,7 @@ class Evm extends EventManager
         }
     }
 
-    public function removeEventListener(string|array $events, object|string $listener): void
+    public function removeEventListener(string|array $events, object|string|array $listener): void
     {
         if (!$this->initializedSubscribers) {
             $this->initializeSubscribers();
@@ -151,7 +146,9 @@ class Evm extends EventManager
             $this->initializeSubscribers();
         }
 
-        parent::addEventSubscriber($subscriber);
+        foreach ($subscriber->getSubscribedEvents() as $eventName => $params) {
+            $this->addEventListener($eventName, [$subscriber, $params]);
+        }
     }
 
     public function removeEventSubscriber(EventSubscriber $subscriber): void
@@ -160,7 +157,9 @@ class Evm extends EventManager
             $this->initializeSubscribers();
         }
 
-        parent::removeEventSubscriber($subscriber);
+        foreach ($subscriber->getSubscribedEvents() as $eventName => $params) {
+            $this->removeEventListener($eventName, [$subscriber, $params]);
+        }
     }
 
     private function initializeListeners(string $eventName): void
