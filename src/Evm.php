@@ -145,9 +145,15 @@ class Evm extends EventManager
         if (!$this->initializedSubscribers) {
             $this->initializeSubscribers();
         }
-
-        foreach ($subscriber->getSubscribedEvents() as $eventName => $params) {
-            $this->addEventListener($eventName, [$subscriber, $params]);
+        $subscribedEvents = $subscriber->getSubscribedEvents();
+        $keys = array_keys($subscribedEvents);
+        if ($keys !== range(0, count($subscribedEvents) - 1)) {
+            // sequential array
+            parent::addEventSubscriber($subscriber);
+        } else {
+            foreach ($subscribedEvents as $eventName => $params) {
+                $this->addEventListener($eventName, [$subscriber, $params]);
+            }
         }
     }
 
@@ -156,9 +162,16 @@ class Evm extends EventManager
         if (!$this->initializedSubscribers) {
             $this->initializeSubscribers();
         }
+        $subscribedEvents = $subscriber->getSubscribedEvents();
+        $keys = array_keys($subscribedEvents);
+        if ($keys !== range(0, count($subscribedEvents) - 1)) {
+            // sequential array
+            parent::removeEventSubscriber($subscriber);
+        } else {
 
-        foreach ($subscriber->getSubscribedEvents() as $eventName => $params) {
-            $this->removeEventListener($eventName, [$subscriber, $params]);
+            foreach ($subscriber->getSubscribedEvents() as $eventName => $params) {
+                $this->removeEventListener($eventName, [$subscriber, $params]);
+            }
         }
     }
 
