@@ -149,7 +149,7 @@ class Evm extends EventManager
         $keys = array_keys($subscribedEvents);
         if ($keys !== range(0, count($subscribedEvents) - 1)) {
             // sequential array
-            parent::addEventSubscriber($subscriber);
+            $this->addEventListener($subscriber->getSubscribedEvents(), $subscriber);
         } else {
             foreach ($subscribedEvents as $eventName => $params) {
                 $this->addEventListener($eventName, [$subscriber, $params]);
@@ -166,7 +166,7 @@ class Evm extends EventManager
         $keys = array_keys($subscribedEvents);
         if ($keys !== range(0, count($subscribedEvents) - 1)) {
             // sequential array
-            parent::removeEventSubscriber($subscriber);
+            $this->removeEventSubscriber($subscriber->getSubscribedEvents(), $subscriber);
         } else {
 
             foreach ($subscriber->getSubscribedEvents() as $eventName => $params) {
