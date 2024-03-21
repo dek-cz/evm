@@ -1,7 +1,9 @@
 <?php
+declare(strict_types = 1);
 
 namespace DekApps\Evm;
 
+use DekApps\Evm\Diagnostics\Panel;
 use Doctrine\Common\EventArgs;
 use Doctrine\Common\EventManager;
 use Doctrine\Common\EventSubscriber;
@@ -27,6 +29,8 @@ class Evm extends EventManager
 
     private Container $container;
 
+    private ?Panel $panel = null;
+
     public function __construct(Container $container)
     {
         $this->container = $container;
@@ -34,6 +38,9 @@ class Evm extends EventManager
 
     public function dispatchEvent(string $eventName, ?EventArgs $eventArgs = null): void
     {
+        if ($this->panel) {
+            $this->panel->eventDispatch($eventName, $eventArgs);
+        }
         if (!$this->initializedSubscribers) {
             $this->initializeSubscribers();
         }
@@ -49,6 +56,9 @@ class Evm extends EventManager
 
         foreach ($this->listeners[$eventName] as $hash => $listener) {
             $listener->{$this->methods[$eventName][$hash]}($eventArgs);
+        }
+        if ($this->panel) {
+            $this->panel->eventDispatched($eventName, $eventArgs);
         }
     }
 
@@ -234,6 +244,11 @@ class Evm extends EventManager
         }
 
         return $event;
+    }
+
+    public function setPanel(?Panel $panel): void
+    {
+        $this->panel = $panel;
     }
 
 }
