@@ -35,7 +35,7 @@ class EvmExtension extends CompilerExtension
             $builder->addAlias($this->prefix('evm'), $builder->getDefinition(EvmExtension::EVM_ALIAS)->getName());
         }
         $evm = $builder->getDefinition($this->prefix('evm'));
-        if ($config['debugger']) {
+        if (isset($config['debugger']) && $config['debugger']) {
             $defaults = ['dispatchTree' => FALSE, 'dispatchLog' => TRUE, 'events' => TRUE, 'listeners' => FALSE];
             if (is_array($config['debugger'])) {
                 $config['debugger'] = Helpers::merge($config['debugger'], $defaults);
