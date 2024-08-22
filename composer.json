@@ -8,7 +8,7 @@
         "php": "^8.2",
         "doctrine/common": "^3.3",
         "nette/di": "^3.0",
-        "nette/utils": "^3.0"
+        "nette/utils": "^4.0"
     },
     "require-dev": {
         "nette/tester": "dev-master",
